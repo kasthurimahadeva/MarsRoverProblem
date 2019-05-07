@@ -3,12 +3,12 @@ import Model.Plateau;
 import Model.Position;
 import Model.Rover;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class App {
     public static void main(String[] args) {
@@ -19,7 +19,7 @@ public class App {
     }
 
     private static List<Rover> parseInput() {
-        List<String> lines = getLinesFromFile();
+        List<String> lines = getLinesFromFile("input.txt");
         Plateau plateau = constructPlateau(lines.get(0).trim());
         return constructRovers(lines, plateau);
     }
@@ -64,11 +64,13 @@ public class App {
         }
     }
 
-    private static List<String> getLinesFromFile() {
+    private static List<String> getLinesFromFile(String fileName) {
         List<String> lines = null;
         try {
-            ClassLoader classLoader = App.class.getClassLoader();
-            lines = Files.readAllLines(Path.of(Objects.requireNonNull(classLoader.getResource("input.txt")).toURI()), StandardCharsets.UTF_8);
+            File jarFile = new File(App.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+            String inputFilePath = jarFile.getParent() + File.separator + fileName;
+            File inputFile = new File(inputFilePath);
+            lines = Files.readAllLines(Path.of(inputFile.toURI()), StandardCharsets.UTF_8);
 
         } catch (Exception e) {
             System.out.println("Unable to read input.txt, existing");
