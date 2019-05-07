@@ -95,7 +95,7 @@ public class App {
             File jarFile = new File(App.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
             String inputFilePath = jarFile.getParent() + File.separator + fileName;
             File inputFile = new File(inputFilePath);
-            lines = Files.readAllLines(Path.of(inputFile.toURI()), StandardCharsets.UTF_8);
+            lines = Files.readAllLines(Paths.get(inputFile.toURI()));
 
         } catch (Exception e) {
             System.out.println("Unable to read input.txt, existing");
