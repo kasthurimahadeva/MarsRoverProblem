@@ -4,9 +4,11 @@ import Model.Position;
 import Model.Rover;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,29 @@ public class App {
         printRoverInfo(rovers);
         moveRoversSequentially(rovers);
         printRoverInfo(rovers);
+        writeOutputToFile(rovers);
+    }
+
+    private static void writeOutputToFile(List<Rover> rovers) {
+        StringBuilder output = new StringBuilder();
+        for (Rover rover : rovers) {
+            output.append(rover.getCurrentPosition().getxCoordinate())
+                    .append(" ")
+                    .append(rover.getCurrentPosition().getyCoordinate())
+                    .append(" ")
+                    .append(rover.getCurrentPosition().getOrientation())
+                    .append("\n");
+        }
+        Path path = Paths.get("output.txt");
+        byte[] strToBytes = output.toString().getBytes();
+
+        try {
+            Files.write(path, strToBytes);
+        } catch (IOException e) {
+            System.out.println("Unable to write data to output.txt");
+            e.printStackTrace();
+        }
+        System.out.println("Successfully wrote output to output.txt");
     }
 
     private static List<Rover> parseInput() {
